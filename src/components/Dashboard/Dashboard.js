@@ -19,8 +19,7 @@ import { useAuth } from "../AuthContextProvider.js";
 import { mainListItems } from "./listItems.js";
 import OrderMedicine from "../OrderMedicine/OrderMedicine";
 import { OverviewComponent } from "./OverviewComponent";
-import LabAppointment from "../LabAppointment.js";
-import DoctorAppointment from "../DoctorAppointment.js";
+import UnderConstruction from "../UnderConstruction.js";
 import "./Dashboard.css";
 import RecentOrders from "../RecentOrders.js";
 
@@ -74,9 +73,8 @@ const getComponentToRender = (pageType) => {
     case "orderMedicines":
       return <OrderMedicine />;
     case "doctorAppointment":
-      return <DoctorAppointment />;
     case "labAppointment":
-      return <LabAppointment />;
+      return <UnderConstruction />;
     case "recentOrders":
       return <RecentOrders />;
     default:

@@ -1,13 +1,13 @@
 import React from "react";
-import WrongLocationIcon from "@mui/icons-material/WrongLocation";
+import ConstructionIcon from "@mui/icons-material/Construction";
 import { Typography } from "@mui/material";
 
-const PageNotFound = () => {
+const UnderConstruction = () => {
   return (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <Typography variant="h3">PageNotFound</Typography>
-      <WrongLocationIcon
-        color="error"
+      <Typography variant="h3" >Under Construction</Typography>
+      <ConstructionIcon
+        color="warning"
         fontSize="large"
         sx={{
           height: "5em",
@@ -20,4 +20,4 @@ const PageNotFound = () => {
   );
 };
 
-export default PageNotFound;
+export default UnderConstruction;

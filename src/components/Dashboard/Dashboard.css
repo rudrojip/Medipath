@@ -3,3 +3,10 @@
   gap: 2em 1em;
   flex-wrap: wrap;
 }
+
+.MuiContainer-root.labAppointment,
+.MuiContainer-root.doctorAppointment,
+.MuiContainer-root.recentOrders,
+.MuiContainer-root.orderMedicines {
+  justify-content: center;
+}
