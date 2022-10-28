@@ -21,6 +21,7 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     await signup(data);
+    alert("Please verify your email address to login");
     navigate("/");
   };
 

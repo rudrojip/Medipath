@@ -1,27 +1,27 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { mainListItems } from "./listItems.js";
-import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
+import MenuIcon from "@mui/icons-material/Menu";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MuiAppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import { styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useState } from "react";
 import { useAuth } from "../AuthContextProvider.js";
+import { mainListItems } from "./ListItems.js";
+import OrderMedicine from "../OrderMedicine.js";
+import { OverviewComponent } from "./OverviewComponent";
+import LabAppointment from "../LabAppointment.js";
+import DoctorAppointment from "../DoctorAppointment.js";
 
 const drawerWidth = 240;
 
@@ -68,14 +68,29 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
-
+const getComponentToRender = (pageType) => {
+  switch (pageType) {
+    case "orderMedicines":
+      return <OrderMedicine />;
+    case "doctorAppointment":
+      return <DoctorAppointment />;
+    case "labAppointment":
+      return <LabAppointment />;
+    case "recentOrders":
+      return <OrderMedicine />;
+    default:
+      return <OverviewComponent />;
+  }
+};
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [pageType, setPageType] = useState("overview");
+
+  const { signout } = useAuth();
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const { signout } = useAuth();
 
   const handleSignOut = async () => {
     await signout();
@@ -111,8 +126,8 @@ function DashboardContent() {
           >
             Medipath Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <ExitToAppIcon onClick={handleSignOut} />
+          <IconButton color="inherit" onClick={handleSignOut}>
+            <ExitToAppIcon />
           </IconButton>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
@@ -135,7 +150,7 @@ function DashboardContent() {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List component="nav">{mainListItems}</List>
+        <List component="nav">{mainListItems(setPageType)}</List>
       </Drawer>
       <Box
         component="main"
@@ -151,40 +166,7 @@ function DashboardContent() {
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 240,
-                }}
-              >
-                <Chart />
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  flexDirection: "column",
-                  height: 240,
-                }}
-              >
-                <Deposits />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                <Orders />
-              </Paper>
-            </Grid>
-          </Grid>
+          {getComponentToRender(pageType)}
         </Container>
       </Box>
     </Box>
