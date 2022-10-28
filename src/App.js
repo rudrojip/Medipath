@@ -22,7 +22,7 @@ const SignUp = lazy(() => import("./components/SignUp"));
 const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 
 const App = () => {
-  const [mode, setMode] = useState("dark");
+  const [mode, setMode] = useState("light");
   const toggleTheme = () => {
     mode === "light" ? setMode("dark") : setMode("light");
   };
