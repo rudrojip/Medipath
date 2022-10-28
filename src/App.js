@@ -10,9 +10,9 @@ import { PersonComponent } from "./components/PersonComponent/PersonComponent";
 import PrivateRoute from "./components/PrivateRoute";
 
 // Your Parse initialization configuration goes here
-const PARSE_APPLICATION_ID = "xze8hnBUgSyo7wTlZH2sMHb9enog633AIyFAOtmk";
-const PARSE_HOST_URL = "https://parseapi.back4app.com/";
-const PARSE_JAVASCRIPT_KEY = "gdTtObpw04SDcWD8juqOWCs4IrzpXED5CTn1VpyW";
+const PARSE_APPLICATION_ID = process.env.REACT_APP_PARSE_APPLICATION_ID;
+const PARSE_HOST_URL = process.env.REACT_APP_PARSE_HOST_URL;
+const PARSE_JAVASCRIPT_KEY = process.env.REACT_APP_PARSE_JAVASCRIPT_KEY;
 Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
 Parse.serverURL = PARSE_HOST_URL;
 

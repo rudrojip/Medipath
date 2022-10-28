@@ -18,10 +18,11 @@ import * as React from "react";
 import { useState } from "react";
 import { useAuth } from "../AuthContextProvider.js";
 import { mainListItems } from "./listItems.js";
-import OrderMedicine from "../OrderMedicine.js";
+import OrderMedicine from "../OrderMedicine/OrderMedicine";
 import { OverviewComponent } from "./OverviewComponent";
 import LabAppointment from "../LabAppointment.js";
 import DoctorAppointment from "../DoctorAppointment.js";
+import "./Dashboard.css";
 
 const drawerWidth = 240;
 
@@ -98,7 +99,7 @@ function DashboardContent() {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <AppBar position="absolute" open={open}>
         <Toolbar
           sx={{
@@ -165,7 +166,12 @@ function DashboardContent() {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container
+          style={{ display: "flex", gap: "2em" }}
+          className={pageType}
+          maxWidth="lg"
+          sx={{ mt: 4, mb: 4 }}
+        >
           {getComponentToRender(pageType)}
         </Container>
       </Box>

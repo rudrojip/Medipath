@@ -1,0 +1,5 @@
+.orderMedicines {
+  display: flex;
+  gap: 2em 1em;
+  flex-wrap: wrap;
+}
