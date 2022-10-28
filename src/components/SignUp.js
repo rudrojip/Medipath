@@ -11,36 +11,30 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="#">
-        Medipath
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
+import Parse from "parse/dist/parse.min.js";
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      // Since the signUp method returns a Promise, we need to call it using await
+      const user = new Parse.User();
+      user.set("firstName", data.get("lastName"));
+      user.set("lastName", data.get("firstName"));
+      user.set("email", data.get("email"));
+      user.set("username", data.get("userName"));
+      user.set("password", data.get("password"));
+      const createdUser = await user.signUp();
+      alert(
+        `Success! User ${createdUser.getUsername()} was successfully created!`
+      );
+      return true;
+    } catch (error) {
+      // signUp can fail if any parameter is blank or failed an uniqueness check on the server
+      alert(`Error! ${error}`);
+      return false;
+    }
   };
 
   return (
@@ -97,6 +91,16 @@ export default function SignUp() {
               <TextField
                 required
                 fullWidth
+                id="userName"
+                label="UserName"
+                name="userName"
+                autoComplete="userName"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"
@@ -121,14 +125,13 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/signin" variant="body2">
+              <Link href="/" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 }

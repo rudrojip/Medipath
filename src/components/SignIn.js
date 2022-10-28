@@ -11,33 +11,19 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import { useAuth } from "./AuthContextProvider";
+import { useNavigate } from "react-router";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="#">
-        Medipath
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+export default function SignIn() {
+  const { signin } = useAuth();
+  const navigate = useNavigate();
 
-export default function SignInSide() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    await signin(data);
+    navigate("/dashboard");
+
   };
 
   return (
@@ -125,7 +111,6 @@ export default function SignInSide() {
                 </Link>
               </Grid>
             </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
         </Box>
       </Grid>
