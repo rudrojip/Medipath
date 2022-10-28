@@ -20,8 +20,8 @@ export default function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await signin(data);
-    navigate("/dashboard");
+    const userData = await signin(data);
+    userData !== null && navigate("/dashboard");
   };
 
   return (

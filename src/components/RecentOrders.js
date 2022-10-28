@@ -1,7 +1,7 @@
 import React from "react";
 
 const RecentOrders = () => {
-  return <div>recentOrders</div>;
+  return <div>Recent Orders</div>;
 };
 
 export default RecentOrders;

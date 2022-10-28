@@ -30,6 +30,7 @@ export function AuthContextProvider({ children }) {
       user.set("password", userDetails.get("password"));
       const createdUser = await user.signUp();
       setCurrentUser(createdUser);
+      return createdUser;
     } catch (error) {
       setError(error.message);
     } finally {
@@ -44,6 +45,7 @@ export function AuthContextProvider({ children }) {
         userDetails.get("password")
       );
       setCurrentUser(loggedInUser);
+      return loggedInUser;
     } catch (error) {
       setError(error.message);
     } finally {

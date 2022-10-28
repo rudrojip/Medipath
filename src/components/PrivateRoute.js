@@ -4,11 +4,7 @@ import { useAuth } from "./AuthContextProvider";
 
 function PrivateRoute() {
   const { currentUser } = useAuth();
-  const isEmailVerified = currentUser.get("emailVerified") || false;
-  currentUser &&
-    isEmailVerified === false &&
-    alert("Please verify your email address to login");
-  return currentUser && isEmailVerified ? <Outlet /> : <Navigate to="/" />;
+  return currentUser ? <Outlet /> : <Navigate to="/" />;
 }
 
 export default PrivateRoute;

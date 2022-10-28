@@ -22,6 +22,7 @@ import { OverviewComponent } from "./OverviewComponent";
 import LabAppointment from "../LabAppointment.js";
 import DoctorAppointment from "../DoctorAppointment.js";
 import "./Dashboard.css";
+import RecentOrders from "../RecentOrders.js";
 
 const drawerWidth = 240;
 
@@ -77,7 +78,7 @@ const getComponentToRender = (pageType) => {
     case "labAppointment":
       return <LabAppointment />;
     case "recentOrders":
-      return <OrderMedicine />;
+      return <RecentOrders />;
     default:
       return <OverviewComponent />;
   }

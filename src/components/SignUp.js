@@ -19,9 +19,8 @@ export default function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await signup(data);
-    alert("Please verify your email address to login");
-    navigate("/");
+    const userData = await signup(data);
+    userData !== null && navigate("/dashboard");
   };
 
   return (
