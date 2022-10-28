@@ -21,14 +21,20 @@ export function AuthContextProvider({ children }) {
   }, []);
 
   async function signup(userDetails) {
-    const user = new Parse.User();
-    user.set("firstName", userDetails.get("lastName"));
-    user.set("lastName", userDetails.get("firstName"));
-    user.set("email", userDetails.get("email"));
-    user.set("username", userDetails.get("userName"));
-    user.set("password", userDetails.get("password"));
-    const createdUser = await user.signUp();
-    setCurrentUser(createdUser);
+    try {
+      const user = new Parse.User();
+      user.set("firstName", userDetails.get("lastName"));
+      user.set("lastName", userDetails.get("firstName"));
+      user.set("email", userDetails.get("email"));
+      user.set("username", userDetails.get("userName"));
+      user.set("password", userDetails.get("password"));
+      const createdUser = await user.signUp();
+      setCurrentUser(createdUser);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function signin(userDetails) {
@@ -40,6 +46,17 @@ export function AuthContextProvider({ children }) {
       setCurrentUser(loggedInUser);
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function signout() {
+    try {
+      await Parse.User.logOut();
+      setCurrentUser(null);
+    } catch (error) {
+      setError(error.message);
+    } finally {
       setLoading(false);
     }
   }
@@ -48,6 +65,7 @@ export function AuthContextProvider({ children }) {
     currentUser,
     signup,
     signin,
+    signout,
     error,
   };
   return (

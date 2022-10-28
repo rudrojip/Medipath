@@ -11,30 +11,17 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Parse from "parse/dist/parse.min.js";
+import { useNavigate } from "react-router";
+import { useAuth } from "./AuthContextProvider";
 
 export default function SignUp() {
+  const { signup } = useAuth();
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    try {
-      // Since the signUp method returns a Promise, we need to call it using await
-      const user = new Parse.User();
-      user.set("firstName", data.get("lastName"));
-      user.set("lastName", data.get("firstName"));
-      user.set("email", data.get("email"));
-      user.set("username", data.get("userName"));
-      user.set("password", data.get("password"));
-      const createdUser = await user.signUp();
-      alert(
-        `Success! User ${createdUser.getUsername()} was successfully created!`
-      );
-      return true;
-    } catch (error) {
-      // signUp can fail if any parameter is blank or failed an uniqueness check on the server
-      alert(`Error! ${error}`);
-      return false;
-    }
+    await signup(data);
+    navigate("/");
   };
 
   return (
@@ -111,7 +98,7 @@ export default function SignUp() {
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                label="Accept out terms & conditions"
               />
             </Grid>
           </Grid>

@@ -16,10 +16,12 @@ import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { mainListItems } from "./listItems.js";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import { useAuth } from "../AuthContextProvider.js";
 
 const drawerWidth = 240;
 
@@ -69,8 +71,14 @@ const Drawer = styled(MuiDrawer, {
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
+
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+  const { signout } = useAuth();
+
+  const handleSignOut = async () => {
+    await signout();
   };
 
   return (
@@ -103,6 +111,9 @@ function DashboardContent() {
           >
             Medipath Dashboard
           </Typography>
+          <IconButton color="inherit">
+            <ExitToAppIcon onClick={handleSignOut} />
+          </IconButton>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
