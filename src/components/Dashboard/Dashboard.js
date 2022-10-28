@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useState } from "react";
 import { useAuth } from "../AuthContextProvider.js";
-import { mainListItems } from "./ListItems.js";
+import { mainListItems } from "./listItems.js";
 import OrderMedicine from "../OrderMedicine.js";
 import { OverviewComponent } from "./OverviewComponent";
 import LabAppointment from "../LabAppointment.js";
