@@ -10,3 +10,13 @@
 .MuiContainer-root.orderMedicines {
   justify-content: center;
 }
+
+.MuiCardHeader-content {
+  width: 100%;
+}
+
+.MuiTypography-root.MuiTypography-body1.MuiCardHeader-subheader {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

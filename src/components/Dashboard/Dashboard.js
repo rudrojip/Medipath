@@ -74,7 +74,8 @@ const Drawer = styled(MuiDrawer, {
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const [pageType, setPageType] = useState("overview");
-
+  const [cartDetails, setCartDetails] = useState([]);
+  const [cartBadge, setCartBadge] = useState(0);
   const { signout } = useAuth();
 
   const toggleDrawer = () => {
@@ -85,10 +86,47 @@ function DashboardContent() {
     await signout();
   };
 
+  const handleCartDetails = (toggle, productInfo = null) => {
+    if (productInfo) {
+      switch (toggle) {
+        case "medicines":
+          setCartDetails(productInfo);
+          break;
+        case "remove":
+          if (productInfo.cartCount > 0) {
+            setCartDetails((prevState) => {
+              return [
+                ...prevState.filter((product) => product.id !== productInfo.id),
+                { ...productInfo, cartCount: productInfo.cartCount - 1 },
+              ];
+            });
+            setCartBadge((prevState) => prevState - 1);
+          }
+          break;
+        case "add":
+          setCartDetails((prevState) => {
+            return [
+              ...prevState.filter((product) => product.id !== productInfo.id),
+              { ...productInfo, cartCount: productInfo.cartCount + 1 },
+            ];
+          });
+          setCartBadge((prevState) => prevState + 1);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   const getComponentToRender = (pageType) => {
     switch (pageType) {
       case "orderMedicines":
-        return <OrderMedicine />;
+        return (
+          <OrderMedicine
+            cartDetails={cartDetails}
+            handleCartDetails={handleCartDetails}
+          />
+        );
       case "doctorAppointment":
       case "labAppointment":
         return <UnderConstruction />;
@@ -99,7 +137,13 @@ function DashboardContent() {
       case "checkout":
         return <Checkout />;
       default:
-        return <OverviewComponent setPageType={setPageType} />;
+        return (
+          <OverviewComponent
+            cartDetails={cartDetails}
+            handleCartDetails={handleCartDetails}
+            setPageType={setPageType}
+          />
+        );
     }
   };
 
@@ -139,7 +183,7 @@ function DashboardContent() {
               setPageType("shoppingcart");
             }}
           >
-            <Badge badgeContent={4} color="secondary">
+            <Badge badgeContent={cartBadge} color="secondary">
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
