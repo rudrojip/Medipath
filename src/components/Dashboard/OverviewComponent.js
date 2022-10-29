@@ -6,7 +6,7 @@ import Orders from "./Orders";
 import MedicineCard from "../OrderMedicine/MedicineCard";
 import Title from "./Title";
 
-export function OverviewComponent() {
+export function OverviewComponent({setPageType}) {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -18,7 +18,7 @@ export function OverviewComponent() {
             flexWrap: "wrap",
           }}
         >
-          <Title>Recently Viewed</Title>
+          <Title>Suggested for you</Title>
           {[1, 2, 3, 4].map((highlight) => {
             return (
               <Grid item xs={12} md={4} lg={3} key={highlight}>
@@ -44,7 +44,7 @@ export function OverviewComponent() {
             flexDirection: "column",
           }}
         >
-          <Orders />
+          <Orders setPageType={setPageType}/>
         </Paper>
       </Grid>
     </Grid>

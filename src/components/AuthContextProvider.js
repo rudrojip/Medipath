@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import Parse from "parse/dist/parse.min.js";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -10,15 +11,17 @@ export function AuthContextProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function retriveUser() {
       const currentUser = await Parse.User.current();
       setCurrentUser(currentUser);
+      currentUser !== null && navigate('/dashboard')
       setLoading(false);
     }
     retriveUser();
-  }, []);
+  }, [navigate]);
 
   async function signup(userDetails) {
     try {

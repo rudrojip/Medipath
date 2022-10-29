@@ -60,11 +60,7 @@ const rows = [
   ),
 ];
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-export default function Orders() {
+export default function Orders({ setPageType }) {
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
@@ -92,7 +88,14 @@ export default function Orders() {
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
+      <Link
+        color="primary"
+        href="#"
+        onClick={() => {
+          setPageType("recentOrders");
+        }}
+        sx={{ mt: 3 }}
+      >
         See more orders
       </Link>
     </React.Fragment>

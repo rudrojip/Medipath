@@ -1,7 +1,6 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MuiAppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -22,6 +21,9 @@ import { OverviewComponent } from "./OverviewComponent";
 import UnderConstruction from "../UnderConstruction.js";
 import "./Dashboard.css";
 import RecentOrders from "../RecentOrders.js";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ShoppingCart from "../ShoppingCart.js";
+import Checkout from "../Checkout/Checkout.js";
 
 const drawerWidth = 240;
 
@@ -68,19 +70,7 @@ const Drawer = styled(MuiDrawer, {
     }),
   },
 }));
-const getComponentToRender = (pageType) => {
-  switch (pageType) {
-    case "orderMedicines":
-      return <OrderMedicine />;
-    case "doctorAppointment":
-    case "labAppointment":
-      return <UnderConstruction />;
-    case "recentOrders":
-      return <RecentOrders />;
-    default:
-      return <OverviewComponent />;
-  }
-};
+
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const [pageType, setPageType] = useState("overview");
@@ -93,6 +83,24 @@ function DashboardContent() {
 
   const handleSignOut = async () => {
     await signout();
+  };
+
+  const getComponentToRender = (pageType) => {
+    switch (pageType) {
+      case "orderMedicines":
+        return <OrderMedicine />;
+      case "doctorAppointment":
+      case "labAppointment":
+        return <UnderConstruction />;
+      case "recentOrders":
+        return <RecentOrders />;
+      case "shoppingcart":
+        return <ShoppingCart setPageType={setPageType} />;
+      case "checkout":
+        return <Checkout />;
+      default:
+        return <OverviewComponent setPageType={setPageType} />;
+    }
   };
 
   return (
@@ -124,13 +132,19 @@ function DashboardContent() {
           >
             Medipath Dashboard
           </Typography>
+
+          <IconButton
+            color="inherit"
+            onClick={() => {
+              setPageType("shoppingcart");
+            }}
+          >
+            <Badge badgeContent={4} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
           <IconButton color="inherit" onClick={handleSignOut}>
             <ExitToAppIcon />
-          </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
