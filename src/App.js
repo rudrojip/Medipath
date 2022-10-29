@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { AuthContextProvider } from "./components/AuthContextProvider";
 import PageNotFound from "./components/PageNotFound";
-import { PersonComponent } from "./components/PersonComponent/PersonComponent";
 import PrivateRoute from "./components/PrivateRoute";
 import SwitchTheme from "./components/SwitchTheme";
 
@@ -61,9 +60,6 @@ const App = () => {
                 <Route exact path="/" element={<SignIn />} />
                 <Route exact path="/dashboard" element={<PrivateRoute />}>
                   <Route path="/dashboard" element={<Dashboard />} />
-                </Route>
-                <Route exact path="/person" element={<PrivateRoute />}>
-                  <Route path="/person" element={<PersonComponent />} />
                 </Route>
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route path="*" element={<PageNotFound />} />

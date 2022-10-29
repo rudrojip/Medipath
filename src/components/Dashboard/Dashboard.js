@@ -86,7 +86,7 @@ function DashboardContent() {
     await signout();
   };
 
-  const handleCartDetails = (toggle, productInfo = null) => {
+  const handleCartDetails = React.useCallback((toggle, productInfo = null) => {
     if (productInfo) {
       switch (toggle) {
         case "medicines":
@@ -116,7 +116,7 @@ function DashboardContent() {
           break;
       }
     }
-  };
+  }, []);
 
   const getComponentToRender = (pageType) => {
     switch (pageType) {
