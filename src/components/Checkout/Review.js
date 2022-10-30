@@ -49,7 +49,7 @@ export default function Review() {
           return (
             <ListItem key={index} sx={{ py: 1, px: 0 }}>
               <ListItemText primary={product.name} secondary={product.desc} />
-              <Typography variant="body2">{product.price}</Typography>
+              <Typography variant="body2">{`${product.price} x ${product.quantity}`}</Typography>
             </ListItem>
           );
         })}
