@@ -4,21 +4,11 @@ import React, { useEffect, useState } from "react";
 
 const filter = createFilterOptions();
 
-export default function SearchMedicines({filterValue,setFilterValue,  medicines }) {
-  
-  const [searchList, setSearchList] = useState([]);
-  useEffect(() => {
-    if (medicines.length) {
-      let tempSearchList = searchList;
-      medicines.forEach((medicine) => {
-        const name = medicine.get("Name").toLowerCase();
-        if (tempSearchList.filter((x) => x.title === name).length === 0) {
-          tempSearchList.push({ title: name });
-        }
-      });
-      setSearchList(tempSearchList);
-    }
-  }, [medicines]);
+export default function SearchMedicines({
+  filterValue,
+  setFilterValue,
+  searchList,
+}) {
   return (
     <React.Fragment>
       <Autocomplete

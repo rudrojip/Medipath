@@ -11,22 +11,13 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Chip, Divider, Rating, Tooltip } from "@mui/material";
 
 export default function MedicineCard({
-  medicine,
-  handleCartDetails,
-  cartDetails,
+  product,
+  handleCartDetails = () => {},
 }) {
-  const medicineName = medicine.get("Name");
-  const name =
-    medicineName.charAt(0).toUpperCase() + medicineName.slice(1).toLowerCase();
-
-  const description = medicine.get("Description");
-  const rating = medicine.get("Rating");
-  const stock = medicine.get("Stock");
-  const image = medicine.get("Image");
-  const price = medicine.get("Price");
-
+  const { name, description, rating, stock, image, price, sellCount } = product;
+  
   return (
-    <Card sx={{ maxWidth: 220, p: "10px 10px 0 10px" }}>
+    <Card sx={{ maxWidth: 240, p: "10px 10px 0 10px" }}>
       <Chip
         color={stock > 0 ? "success" : "error"}
         label={stock > 0 ? "In stock" : "out of stock"}
@@ -47,21 +38,21 @@ export default function MedicineCard({
       </Divider>
       <CardActions disableSpacing>
         <Rating name="read-only" value={rating} readOnly />
-        {cartDetails && cartDetails.cartCount ? (
+        {sellCount > 0 ? (
           <>
             <IconButton
               aria-label="add-item"
-              disabled={cartDetails.cartCount === stock}
-              onClick={(e) => handleCartDetails("add", cartDetails)}
+              disabled={sellCount === stock}
+              onClick={() => handleCartDetails("add", product)}
             >
               <AddIcon />
             </IconButton>
 
-            {cartDetails.cartCount}
+            {sellCount}
 
             <IconButton
               aria-label="remove-item"
-              onClick={(e) => handleCartDetails("remove", cartDetails)}
+              onClick={() => handleCartDetails("remove", product)}
             >
               <RemoveIcon />
             </IconButton>
@@ -71,7 +62,7 @@ export default function MedicineCard({
             disabled={stock === 0}
             aria-label="add to cart"
             title="add to cart"
-            onClick={(e) => handleCartDetails("add", cartDetails)}
+            onClick={() => handleCartDetails("add", product)}
           >
             <AddShoppingCartIcon />
           </IconButton>

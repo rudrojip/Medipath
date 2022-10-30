@@ -1,73 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MedicineCard from "./MedicineCard";
 import SearchMedicines from "./SearchMedicines";
-import Parse from "parse/dist/parse.min.js";
 import { CircularProgress, Typography } from "@mui/material";
+import { useProductsContext } from "../ProductsContextProvider";
 
-const OrderMedicine = ({ handleCartDetails, cartDetails }) => {
-  const [medicines, setMedicines] = useState([]);
+const OrderMedicine = ({ handleCartDetails }) => {
   const [filterValue, setFilterValue] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [filteredMedicines, setFilteredMedicines] = useState([]);
+  const { products } = useProductsContext();
+  const [productsList, setProductsList] = useState([]);
 
   useEffect(() => {
-    const getMedicinesData = async function () {
-      const parseQuery = new Parse.Query("Medicines");
-      try {
-        const Medicines = await parseQuery.find();
-        const cartDetails = Medicines.map((product) => {
-          return { ...product, cartCount: 0 };
-        });
-        setMedicines(Medicines);
-        setFilteredMedicines(Medicines);
-        handleCartDetails("medicines", cartDetails);
-      } catch (error) {
-        alert(`Error! ${error.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getMedicinesData();
-  }, []);
+    filterValue
+      ? setProductsList(() =>
+          products.filter((product) => product.name === filterValue.title)
+        )
+      : setProductsList(products);
 
-  useEffect(() => {
-    if (filterValue) {
-      let filteredList = [];
-      medicines.forEach((medicine) => {
-        if (
-          medicine.get("Name").toLowerCase() === filterValue.title.toLowerCase()
-        ) {
-          filteredList.push(medicine);
-        }
-      });
-      setFilteredMedicines(filteredList);
-    } else {
-      setFilteredMedicines(medicines);
-    }
-  }, [filterValue]);
+    return () => {};
+  }, [products, filterValue]);
+
+  const distinctProducts = useMemo(
+    () =>
+      [...new Set(products.map((product) => product.name))].map((title) => {
+        return { title: title };
+      }),
+    []
+  );
 
   return (
     <>
-      <SearchMedicines
-        filterValue={filterValue}
-        setFilterValue={setFilterValue}
-        medicines={medicines}
-      />
-      {loading ? (
-        <CircularProgress />
-      ) : filteredMedicines.length ? (
-        filteredMedicines.map((medicine, index) => {
-          return (
-            <MedicineCard
-              cartDetails={
-                cartDetails.filter((product) => product.id === medicine.id)[0]
-              }
-              handleCartDetails={handleCartDetails}
-              key={index}
-              medicine={medicine}
+      {products.length ? (
+        productsList.length ? (
+          <>
+            <SearchMedicines
+              filterValue={filterValue}
+              setFilterValue={setFilterValue}
+              searchList={distinctProducts}
             />
-          );
-        })
+            {productsList.map((medicine, index) => {
+              return (
+                <MedicineCard
+                  handleCartDetails={handleCartDetails}
+                  key={index}
+                  product={medicine}
+                />
+              );
+            })}
+          </>
+        ) : (
+          <CircularProgress disableShrink />
+        )
       ) : (
         <Typography variant="h3">No Medicines Available</Typography>
       )}

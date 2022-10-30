@@ -17,10 +17,11 @@ export function AuthContextProvider({ children }) {
     async function retriveUser() {
       const currentUser = await Parse.User.current();
       setCurrentUser(currentUser);
-      currentUser !== null && navigate('/dashboard')
+      currentUser !== null && navigate("/dashboard");
       setLoading(false);
     }
     retriveUser();
+    return () => {};
   }, [navigate]);
 
   async function signup(userDetails) {

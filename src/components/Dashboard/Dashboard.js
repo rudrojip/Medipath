@@ -1,6 +1,7 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import MuiAppBar from "@mui/material/AppBar";
 import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
@@ -15,15 +16,15 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useState } from "react";
 import { useAuth } from "../AuthContextProvider.js";
-import { mainListItems } from "./listItems.js";
+import Checkout from "../Checkout/Checkout.js";
 import OrderMedicine from "../OrderMedicine/OrderMedicine";
-import { OverviewComponent } from "./OverviewComponent";
+import { useProductsContext } from "../ProductsContextProvider.js";
+import RecentOrders from "../RecentOrders.js";
+import ShoppingCart from "../ShoppingCart.js";
 import UnderConstruction from "../UnderConstruction.js";
 import "./Dashboard.css";
-import RecentOrders from "../RecentOrders.js";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import ShoppingCart from "../ShoppingCart.js";
-import Checkout from "../Checkout/Checkout.js";
+import { mainListItems } from "./listItems.js";
+import { OverviewComponent } from "./OverviewComponent";
 
 const drawerWidth = 240;
 
@@ -74,9 +75,9 @@ const Drawer = styled(MuiDrawer, {
 function DashboardContent() {
   const [open, setOpen] = useState(true);
   const [pageType, setPageType] = useState("overview");
-  const [cartDetails, setCartDetails] = useState([]);
   const [cartBadge, setCartBadge] = useState(0);
   const { signout } = useAuth();
+  const { handleProductCartActions } = useProductsContext();
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -86,47 +87,29 @@ function DashboardContent() {
     await signout();
   };
 
-  const handleCartDetails = React.useCallback((toggle, productInfo = null) => {
+  const handleCartDetails = React.useCallback((action, productInfo = null) => {
     if (productInfo) {
-      switch (toggle) {
-        case "medicines":
-          setCartDetails(productInfo);
-          break;
-        case "remove":
-          if (productInfo.cartCount > 0) {
-            setCartDetails((prevState) => {
-              return [
-                ...prevState.filter((product) => product.id !== productInfo.id),
-                { ...productInfo, cartCount: productInfo.cartCount - 1 },
-              ];
-            });
-            setCartBadge((prevState) => prevState - 1);
-          }
-          break;
+      switch (action) {
         case "add":
-          setCartDetails((prevState) => {
-            return [
-              ...prevState.filter((product) => product.id !== productInfo.id),
-              { ...productInfo, cartCount: productInfo.cartCount + 1 },
-            ];
-          });
           setCartBadge((prevState) => prevState + 1);
-          break;
+          handleProductCartActions(action, productInfo);
+          return;
+        case "remove":
+          if (productInfo.sellCount > 0) {
+            setCartBadge((prevState) => prevState - 1);
+            handleProductCartActions(action, productInfo);
+          }
+          return;
         default:
-          break;
+          return;
       }
     }
-  }, []);
+  }, [handleProductCartActions]);
 
   const getComponentToRender = (pageType) => {
     switch (pageType) {
       case "orderMedicines":
-        return (
-          <OrderMedicine
-            cartDetails={cartDetails}
-            handleCartDetails={handleCartDetails}
-          />
-        );
+        return <OrderMedicine handleCartDetails={handleCartDetails} />;
       case "doctorAppointment":
       case "labAppointment":
         return <UnderConstruction />;
@@ -139,7 +122,6 @@ function DashboardContent() {
       default:
         return (
           <OverviewComponent
-            cartDetails={cartDetails}
             handleCartDetails={handleCartDetails}
             setPageType={setPageType}
           />

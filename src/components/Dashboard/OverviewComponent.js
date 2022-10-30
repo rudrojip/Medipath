@@ -8,20 +8,40 @@ import MedicineCard from "../OrderMedicine/MedicineCard";
 import Orders from "./Orders";
 import Title from "./Title";
 
-export function OverviewComponent({
-  handleCartDetails,
-  setPageType,
-  cartDetails: medicines,
-}) {
-  const [Medicines, setMedicines] = useState([]);
+export function OverviewComponent({ handleCartDetails, setPageType }) {
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getMedicinesData = async function () {
       const parseQuery = new Parse.Query("Medicines");
       parseQuery.limit(4);
       try {
-        const medicines = await parseQuery.find();
-        setMedicines(medicines);
+        const suggestedProducts = await parseQuery.find();
+        const products = suggestedProducts.map((suggestedProduct) => {
+          const medicineName = suggestedProduct.get("Name");
+          const name =
+            medicineName.charAt(0).toUpperCase() +
+            medicineName.slice(1).toLowerCase();
+
+          const description = suggestedProduct.get("Description");
+          const rating = suggestedProduct.get("Rating");
+          const stock = suggestedProduct.get("Stock");
+          const image = suggestedProduct.get("Image");
+          const price = suggestedProduct.get("Price");
+          const sellCount = suggestedProduct.get("SellCount") || 0;
+
+          return {
+            id: suggestedProduct.id,
+            name: name,
+            description: description,
+            rating: rating,
+            stock: stock,
+            image: image,
+            price: price,
+            sellCount: sellCount,
+          };
+        });
+        setProducts(products);
       } catch (error) {
         alert(`Error! ${error.message}`);
       } finally {
@@ -29,6 +49,7 @@ export function OverviewComponent({
       }
     };
     getMedicinesData();
+    return () => {};
   }, []);
 
   return (
@@ -46,7 +67,7 @@ export function OverviewComponent({
           {loading ? (
             <CircularProgress />
           ) : (
-            Medicines.map((medicine, index) => {
+            products.map((product, index) => {
               return (
                 <Grid item xs={12} md={4} lg={3} key={index}>
                   <Paper
@@ -57,8 +78,9 @@ export function OverviewComponent({
                     }}
                   >
                     <MedicineCard
+                      key={index}
+                      product={product}
                       handleCartDetails={handleCartDetails}
-                      medicine={medicine}
                     />
                   </Paper>
                 </Grid>

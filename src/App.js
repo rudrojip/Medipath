@@ -7,6 +7,7 @@ import "./App.css";
 import { AuthContextProvider } from "./components/AuthContextProvider";
 import PageNotFound from "./components/PageNotFound";
 import PrivateRoute from "./components/PrivateRoute";
+import ProductsContextProvider from "./components/ProductsContextProvider";
 import SwitchTheme from "./components/SwitchTheme";
 
 // Your Parse initialization configuration goes here
@@ -59,7 +60,14 @@ const App = () => {
               <Routes>
                 <Route exact path="/" element={<SignIn />} />
                 <Route exact path="/dashboard" element={<PrivateRoute />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route
+                    path="/dashboard"
+                    element={
+                      <ProductsContextProvider>
+                        <Dashboard />
+                      </ProductsContextProvider>
+                    }
+                  />
                 </Route>
                 <Route exact path="/signup" element={<SignUp />} />
                 <Route path="*" element={<PageNotFound />} />
