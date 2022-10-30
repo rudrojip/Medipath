@@ -42,6 +42,9 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
         {cartData.length ? (
           <>
             {cartData.map((cartItem, index) => {
+              if (index === 0) {
+                totalAmount.current = 0;
+              }
               const total =
                 Number(cartItem.price.slice(1)) * cartItem.sellCount;
               totalAmount.current = Number(totalAmount.current) + total;
@@ -68,7 +71,10 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                         alt={cartItem.name}
                       />
 
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <Box
+                        key={cartItem.id}
+                        sx={{ display: "flex", flexDirection: "column" }}
+                      >
                         <CardContent sx={{ flex: "1 0 auto" }}>
                           <Typography component="div" variant="h5">
                             {cartItem.name}
@@ -82,6 +88,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                           </Typography>
                         </CardContent>
                         <Box
+                          key={cartItem.id}
                           sx={{
                             display: "flex",
                             alignItems: "center",
@@ -106,6 +113,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                             <RemoveIcon />
                           </IconButton>
                           <Box
+                            key={cartItem.id}
                             sx={{
                               display: "flex",
                               flexDirection: "row",

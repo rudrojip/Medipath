@@ -23,6 +23,7 @@ export default function Review() {
     totalAmount.current = 0;
     const cartItems = getCartData();
     const products = cartItems.map((item) => {
+      totalAmount.current += Number(item.price.slice(1)) * item.sellCount;
       return {
         name: item.name,
         desc: item.description,
@@ -44,6 +45,9 @@ export default function Review() {
       </Typography>
       <List disablePadding>
         {productsList.map((product, index) => {
+          if (index === 0) {
+            totalAmount.current = 0;
+          }
           const total = Number(product.price.slice(1)) * product.quantity;
           totalAmount.current = Number(totalAmount.current) + total;
           return (
