@@ -96,7 +96,7 @@ function DashboardContent() {
             handleProductCartActions(action, productInfo);
             return;
           case "remove":
-            if (productInfo.sellCount > 0) {
+            if (productInfo.cartCount > 0) {
               setCartBadge((prevState) => prevState - 1);
               handleProductCartActions(action, productInfo);
             }
@@ -126,7 +126,7 @@ function DashboardContent() {
           />
         );
       case "checkout":
-        return <Checkout />;
+        return <Checkout setCartBadge={setCartBadge} />;
       default:
         return (
           <OverviewComponent

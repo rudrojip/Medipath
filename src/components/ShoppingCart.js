@@ -12,8 +12,8 @@ import { Button, Paper } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { useEffect, useRef, useState } from "react";
-import { useProductsContext } from "./ProductsContextProvider";
 import EmptyCart from "./EmptyCart";
+import { useProductsContext } from "./ProductsContextProvider";
 
 export default function ShoppingCart({ setPageType, handleCartDetails }) {
   const { products, getCartData } = useProductsContext();
@@ -46,7 +46,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                 totalAmount.current = 0;
               }
               const total =
-                Number(cartItem.price.slice(1)) * cartItem.sellCount;
+                Number(cartItem.price.slice(1)) * cartItem.cartCount;
               totalAmount.current = Number(totalAmount.current) + total;
 
               return (
@@ -98,12 +98,12 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                         >
                           <IconButton
                             aria-label="add-item"
-                            disabled={cartItem.sellCount === cartItem.stock}
+                            disabled={cartItem.cartCount === cartItem.stock}
                             onClick={() => handleCartDetails("add", cartItem)}
                           >
                             <AddIcon />
                           </IconButton>
-                          {cartItem.sellCount}
+                          {cartItem.cartCount}
                           <IconButton
                             aria-label="remove-item"
                             onClick={() =>
@@ -124,7 +124,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
                           >
                             <Typography variant="h6">{`Price: ₹${Number(
                               Number(cartItem.price.slice(1)) *
-                                cartItem.sellCount
+                                cartItem.cartCount
                             ).toFixed(2)}`}</Typography>
                           </Box>
                         </Box>
@@ -150,7 +150,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
             </Typography>
           </>
         ) : (
-          <EmptyCart />
+          <EmptyCart handleCartDetails={handleCartDetails} />
         )}
       </List>
       {cartData.length !== 0 && (

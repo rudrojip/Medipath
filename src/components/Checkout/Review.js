@@ -1,10 +1,10 @@
-import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import Grid from "@mui/material/Grid";
-import { useProductsContext } from "../ProductsContextProvider";
+import Typography from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
+import { useProductsContext } from "../ProductsContextProvider";
 
 const addresses = ["1 MUI Drive", "Reactville", "Anytown", "99999", "USA"];
 const payments = [
@@ -23,12 +23,12 @@ export default function Review() {
     totalAmount.current = 0;
     const cartItems = getCartData();
     const products = cartItems.map((item) => {
-      totalAmount.current += Number(item.price.slice(1)) * item.sellCount;
+      totalAmount.current += Number(item.price.slice(1)) * item.cartCount;
       return {
         name: item.name,
         desc: item.description,
         price: item.price,
-        quantity: item.sellCount,
+        quantity: item.cartCount,
       };
     });
     setProductsList(products);

@@ -1,12 +1,13 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
-import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useProductsContext } from "../ProductsContextProvider";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
@@ -26,10 +27,14 @@ function getStepContent(step) {
   }
 }
 
-export default function Checkout() {
+export default function Checkout({ setCartBadge }) {
   const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
+  const { proceedToCheckout } = useProductsContext();
+  const handleNext = async () => {
+    if (activeStep === steps.length - 1) {
+      await proceedToCheckout();
+      setCartBadge(0);
+    }
     setActiveStep(activeStep + 1);
   };
 
@@ -47,7 +52,7 @@ export default function Checkout() {
           Checkout
         </Typography>
         <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-          {steps.map((label,index) => (
+          {steps.map((label, index) => (
             <Step key={index}>
               <StepLabel>{label}</StepLabel>
             </Step>
@@ -59,7 +64,7 @@ export default function Checkout() {
               Thank you for your order.
             </Typography>
             <Typography variant="subtitle1">
-              Your order number is #2001539. We have emailed your order
+              Your order number is placed. We have emailed your order
               confirmation, and will send you an update when your order has
               shipped.
             </Typography>

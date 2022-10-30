@@ -1,21 +1,22 @@
+import AddIcon from "@mui/icons-material/Add";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Chip, Divider, Rating, Tooltip } from "@mui/material";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Chip, Divider, Rating, Tooltip } from "@mui/material";
 
 export default function MedicineCard({
   product,
   handleCartDetails = () => {},
+  isRecentProduct = false,
 }) {
-  const { name, description, rating, stock, image, price, sellCount } = product;
-  
+  const { name, description, rating, stock, image, price, cartCount } = product;
+
   return (
     <Card sx={{ maxWidth: 240, p: "10px 10px 0 10px" }}>
       <Chip
@@ -37,18 +38,18 @@ export default function MedicineCard({
         <Chip label={`Price - ${price}`} size="medium" />
       </Divider>
       <CardActions disableSpacing>
-        <Rating name="read-only" value={rating} readOnly />
-        {sellCount > 0 ? (
+        <Rating name="read-only" value={rating} precision={0.5} readOnly />
+        {cartCount > 0 ? (
           <>
             <IconButton
               aria-label="add-item"
-              disabled={sellCount === stock}
+              disabled={cartCount === stock}
               onClick={() => handleCartDetails("add", product)}
             >
               <AddIcon />
             </IconButton>
 
-            {sellCount}
+            {cartCount}
 
             <IconButton
               aria-label="remove-item"
@@ -66,6 +67,14 @@ export default function MedicineCard({
           >
             <AddShoppingCartIcon />
           </IconButton>
+        )}
+        {isRecentProduct && (
+          <Chip
+            color={stock > 0 ? "success" : "error"}
+            disabled={!stock}
+            label="Refill"
+            onClick={() => handleCartDetails("add", product)}
+          />
         )}
       </CardActions>
     </Card>

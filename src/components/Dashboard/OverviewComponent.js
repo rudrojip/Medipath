@@ -5,50 +5,22 @@ import Parse from "parse/dist/parse.min.js";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import MedicineCard from "../OrderMedicine/MedicineCard";
+import { useProductsContext } from "../ProductsContextProvider";
 import Orders from "./Orders";
 import Title from "./Title";
 
 export function OverviewComponent({ handleCartDetails, setPageType }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { getSuggestedProducts } = useProductsContext();
+
   useEffect(() => {
-    const getMedicinesData = async function () {
-      const parseQuery = new Parse.Query("Medicines");
-      parseQuery.limit(4);
-      try {
-        const suggestedProducts = await parseQuery.find();
-        const products = suggestedProducts.map((suggestedProduct) => {
-          const medicineName = suggestedProduct.get("Name");
-          const name =
-            medicineName.charAt(0).toUpperCase() +
-            medicineName.slice(1).toLowerCase();
-
-          const description = suggestedProduct.get("Description");
-          const rating = suggestedProduct.get("Rating");
-          const stock = suggestedProduct.get("Stock");
-          const image = suggestedProduct.get("Image");
-          const price = suggestedProduct.get("Price");
-          const sellCount = suggestedProduct.get("SellCount") || 0;
-
-          return {
-            id: suggestedProduct.id,
-            name: name,
-            description: description,
-            rating: rating,
-            stock: stock,
-            image: image,
-            price: price,
-            sellCount: sellCount,
-          };
-        });
-        setProducts(products);
-      } catch (error) {
-        alert(`Error! ${error.message}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getMedicinesData();
+    async function getSuggestedProductsList() {
+      const suggestedProducts = await getSuggestedProducts();
+      setProducts(suggestedProducts);
+      setLoading(false);
+    }
+    getSuggestedProductsList();
     return () => {};
   }, []);
 
