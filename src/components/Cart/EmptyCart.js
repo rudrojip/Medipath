@@ -2,26 +2,27 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { CircularProgress, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import Title from "./Dashboard/Title";
-import MedicineCard from "./OrderMedicine/MedicineCard";
-import { useProductsContext } from "./ProductsContextProvider";
+import Title from "../Dashboard/Title";
+import MedicineCard from "../OrderMedicine/MedicineCard";
+import { useProductsContext } from "../ProductsContextProvider";
 
 const EmptyCart = ({ handleCartDetails }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isRecentProduct, setIsRecentProduct] = useState(true);
-  const { getRecentlyOrderedProducts } = useProductsContext();
+  const { getRecentlyOrderedProducts, getSuggestedProducts } =
+    useProductsContext();
 
   useEffect(() => {
     async function getRecentlyOrderedProductsList() {
       const recentlyOrdered = await getRecentlyOrderedProducts();
-      if (!recentlyOrdered.length) {
-        setIsRecentProduct(false);
+      if (recentlyOrdered.length === 0) {
         const suggestedProducts = await getSuggestedProducts();
+        setIsRecentProduct(() => false);
         setProducts(suggestedProducts);
         setLoading(false);
       } else {
-        setIsRecentProduct(true);
+        setIsRecentProduct(() => true);
         setProducts(recentlyOrdered);
         setLoading(false);
       }
@@ -30,8 +31,6 @@ const EmptyCart = ({ handleCartDetails }) => {
     getRecentlyOrderedProductsList();
     return () => {};
   }, []);
-
-  const { getSuggestedProducts } = useProductsContext();
 
   return (
     <Grid container spacing={3}>
@@ -58,32 +57,34 @@ const EmptyCart = ({ handleCartDetails }) => {
             gap: 2,
           }}
         >
-          <Title>
-            {isRecentProduct
-              ? `Recently ordered products`
-              : `Suggested for you`}
-          </Title>
           {loading ? (
             <CircularProgress />
           ) : (
-            products.map((product, index) => {
-              return (
-                <Paper
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                  }}
-                >
-                  <MedicineCard
+            <>
+              <Title>
+                {isRecentProduct
+                  ? `Recently ordered products by customers`
+                  : `Suggested for you & popular products`}
+              </Title>
+              {products.map((product, index) => {
+                return (
+                  <Paper
                     key={index}
-                    product={product}
-                    handleCartDetails={handleCartDetails}
-                    isRecentProduct={isRecentProduct}
-                  />
-                </Paper>
-              );
-            })
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <MedicineCard
+                      key={index}
+                      product={product}
+                      handleCartDetails={handleCartDetails}
+                      isRecentProduct={isRecentProduct}
+                    />
+                  </Paper>
+                );
+              })}
+            </>
           )}
         </Paper>
       </Grid>

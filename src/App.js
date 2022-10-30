@@ -17,8 +17,8 @@ const PARSE_JAVASCRIPT_KEY = process.env.REACT_APP_PARSE_JAVASCRIPT_KEY;
 Parse.initialize(PARSE_APPLICATION_ID, PARSE_JAVASCRIPT_KEY);
 Parse.serverURL = PARSE_HOST_URL;
 
-const SignIn = lazy(() => import("./components/SignIn"));
-const SignUp = lazy(() => import("./components/SignUp"));
+const SignIn = lazy(() => import("./components/Authentication/SignIn"));
+const SignUp = lazy(() => import("./components/Authentication/SignUp"));
 const Dashboard = lazy(() => import("./components/Dashboard/Dashboard"));
 
 const App = () => {

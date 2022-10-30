@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useState
+  useState,
 } from "react";
 import { useAuth } from "./AuthContextProvider";
 
@@ -133,6 +133,7 @@ const ProductsContextProvider = ({ children }) => {
 
   const getRecentOrdersForUser = async () => {
     const query = new Parse.Query("Orders");
+    query.descending("createdAt");
     try {
       const results = await query.equalTo("userId", currentUser.id);
       return results.map((result) => {
@@ -151,9 +152,10 @@ const ProductsContextProvider = ({ children }) => {
     }
   };
 
-  const getSuggestedProducts = async () => {
+  const getSuggestedProducts = async (limit = 4) => {
     const parseQuery = new Parse.Query("Medicines");
-    parseQuery.limit(4);
+    parseQuery.descending("sellCount");
+    parseQuery.limit(limit);
     try {
       const products = await parseQuery.find();
 
@@ -167,6 +169,7 @@ const ProductsContextProvider = ({ children }) => {
 
   const getRecentlyOrderedProducts = async () => {
     const parseQuery = new Parse.Query("Medicines");
+    parseQuery.descending("createdAt");
     parseQuery.limit(12);
     parseQuery.greaterThan("SellCount", 0);
     try {

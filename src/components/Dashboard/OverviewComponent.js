@@ -35,7 +35,7 @@ export function OverviewComponent({ handleCartDetails, setPageType }) {
             flexWrap: "wrap",
           }}
         >
-          <Title>Suggested for you</Title>
+          <Title>{`Suggested for you & popular products`}</Title>
           {loading ? (
             <CircularProgress />
           ) : (

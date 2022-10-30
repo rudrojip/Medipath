@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { useAuth } from "./AuthContextProvider";
+import { useAuth } from "../AuthContextProvider";
 import { useNavigate } from "react-router";
 
 export default function SignIn() {

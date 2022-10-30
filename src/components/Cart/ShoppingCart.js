@@ -13,7 +13,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { useEffect, useRef, useState } from "react";
 import EmptyCart from "./EmptyCart";
-import { useProductsContext } from "./ProductsContextProvider";
+import { useProductsContext } from "../ProductsContextProvider";
 
 export default function ShoppingCart({ setPageType, handleCartDetails }) {
   const { products, getCartData } = useProductsContext();
