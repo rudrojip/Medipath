@@ -133,7 +133,6 @@ const ProductsContextProvider = ({ children }) => {
 
   const getRecentOrdersForUser = async () => {
     const query = new Parse.Query("Orders");
-    query.descending("createdAt");
     try {
       const results = await query.equalTo("userId", currentUser.id);
       return results.map((result) => {
