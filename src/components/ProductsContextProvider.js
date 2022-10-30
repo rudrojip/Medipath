@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Parse from "parse/dist/parse.min.js";
 
 const ProductContext = createContext();
@@ -23,7 +29,7 @@ const ProductsContextProvider = ({ children }) => {
           const rating = medicine.get("Rating");
           const stock = medicine.get("Stock");
           const image = medicine.get("Image");
-          const price = medicine.get("Price");
+          const price = medicine.get("Price").replace("$", "₹");
           const sellCount = medicine.get("SellCount") || 0;
 
           return {
@@ -85,9 +91,18 @@ const ProductsContextProvider = ({ children }) => {
     }
   };
 
+  const getCartData = useCallback(() => {
+    return products
+      .map((product) => {
+        return product.sellCount ? product : null;
+      })
+      .filter((product) => product);
+  }, [products]);
+
   const value = {
     products,
     handleProductCartActions,
+    getCartData,
   };
 
   return (

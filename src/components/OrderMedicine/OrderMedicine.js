@@ -8,7 +8,7 @@ const OrderMedicine = ({ handleCartDetails }) => {
   const [filterValue, setFilterValue] = useState(null);
   const { products } = useProductsContext();
   const [productsList, setProductsList] = useState([]);
-
+  
   useEffect(() => {
     filterValue
       ? setProductsList(() =>

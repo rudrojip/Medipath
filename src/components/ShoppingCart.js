@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -8,13 +7,28 @@ import Typography from "@mui/material/Typography";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
+import { Button, Paper } from "@mui/material";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { Button, Paper } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
+import { useProductsContext } from "./ProductsContextProvider";
+import EmptyCart from "./EmptyCart";
 
-export default function ShoppingCart({ setPageType }) {
+export default function ShoppingCart({ setPageType, handleCartDetails }) {
+  const { products, getCartData } = useProductsContext();
+  const [cartData, setCartData] = useState([]);
+  const totalAmount = useRef(0);
+
+  useEffect(() => {
+    totalAmount.current = 0;
+    const cartDetails = getCartData();
+    setCartData(cartDetails);
+    return () => {
+      totalAmount.current = 0;
+    };
+  }, [products, getCartData]);
+
   return (
     <div
       style={{
@@ -24,81 +38,131 @@ export default function ShoppingCart({ setPageType }) {
         gap: 10,
       }}
     >
-      <Typography variant="h4" >Your Shopping Cart</Typography>
       <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-        {[1, 2, 3, 4, 5].map((item) => {
-          return (
-            <>
-              <ListItem sx={{ width: "100%" }} alignItems="flex-start">
-                <Card
-                  key={item}
-                  sx={{
-                    width: "60%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    sx={{ width: 151 }}
-                    image="http://dummyimage.com/200x200.png/dddddd/000000"
-                    alt="Live from space album cover"
-                  />
+        {cartData.length ? (
+          <>
+            {cartData.map((cartItem, index) => {
+              const total =
+                Number(cartItem.price.slice(1)) * cartItem.sellCount;
+              totalAmount.current = Number(totalAmount.current) + total;
 
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <CardContent sx={{ flex: "1 0 auto" }}>
-                      <Typography component="div" variant="h5">
-                        Live From Space
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        color="text.secondary"
-                        component="div"
-                      >
-                        Mac Miller
-                      </Typography>
-                    </CardContent>
-                    <Box
+              return (
+                <>
+                  <ListItem
+                    key={index}
+                    sx={{ width: "100%" }}
+                    alignItems="flex-start"
+                  >
+                    <Card
+                      key={index}
                       sx={{
+                        width: "60%",
                         display: "flex",
-                        alignItems: "center",
-                        pl: 1,
-                        pb: 1,
+                        justifyContent: "flex-start",
                       }}
                     >
-                      <IconButton aria-label="add-item">
-                        <AddIcon />
-                      </IconButton>
-                      <IconButton disabled aria-label="cart-icon">
-                        <ShoppingCartIcon sx={{ height: 30, width: 30 }} />
-                      </IconButton>
-                      <IconButton aria-label="remove-item">
-                        <RemoveIcon />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </Card>
-              </ListItem>
-            </>
-          );
-        })}
+                      <CardMedia
+                        component="img"
+                        sx={{ width: 151 }}
+                        image={cartItem.image}
+                        alt={cartItem.name}
+                      />
+
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <CardContent sx={{ flex: "1 0 auto" }}>
+                          <Typography component="div" variant="h5">
+                            {cartItem.name}
+                          </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            color="text.secondary"
+                            component="div"
+                          >
+                            {cartItem.description}
+                          </Typography>
+                        </CardContent>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            pl: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <IconButton
+                            aria-label="add-item"
+                            disabled={cartItem.sellCount === cartItem.stock}
+                            onClick={() => handleCartDetails("add", cartItem)}
+                          >
+                            <AddIcon />
+                          </IconButton>
+                          {cartItem.sellCount}
+                          <IconButton
+                            aria-label="remove-item"
+                            onClick={() =>
+                              handleCartDetails("remove", cartItem)
+                            }
+                          >
+                            <RemoveIcon />
+                          </IconButton>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "center",
+                              pl: 1,
+                              pb: 1,
+                            }}
+                          >
+                            <Typography variant="h6">{`Price: ₹${Number(
+                              Number(cartItem.price.slice(1)) *
+                                cartItem.sellCount
+                            ).toFixed(2)}`}</Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Card>
+                  </ListItem>
+                </>
+              );
+            })}
+            <Typography
+              sx={{
+                fontWeight: 700,
+                display: "flex",
+                justifyContent: "center",
+              }}
+              color="text.secondary"
+              variant="h6"
+              component="h2"
+            >
+              {`Total bill amount - ₹${Number(
+                totalAmount.current.valueOf()
+              ).toFixed(2)}`}
+            </Typography>
+          </>
+        ) : (
+          <EmptyCart />
+        )}
       </List>
-      <Paper
-        sx={{
-          display: "flex",
-          p: 1,
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
-        <Button
-          sx={{ maxWidth: "25rem" }}
-          variant="contained"
-          onClick={() => setPageType("checkout")}
+      {cartData.length !== 0 && (
+        <Paper
+          sx={{
+            display: "flex",
+            p: 1,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
-          Proceed to checkout
-        </Button>
-      </Paper>
+          <Button
+            sx={{ maxWidth: "25rem" }}
+            variant="contained"
+            onClick={() => setPageType("checkout")}
+          >
+            Proceed to checkout
+          </Button>
+        </Paper>
+      )}
     </div>
   );
 }

@@ -87,24 +87,27 @@ function DashboardContent() {
     await signout();
   };
 
-  const handleCartDetails = React.useCallback((action, productInfo = null) => {
-    if (productInfo) {
-      switch (action) {
-        case "add":
-          setCartBadge((prevState) => prevState + 1);
-          handleProductCartActions(action, productInfo);
-          return;
-        case "remove":
-          if (productInfo.sellCount > 0) {
-            setCartBadge((prevState) => prevState - 1);
+  const handleCartDetails = React.useCallback(
+    (action, productInfo = null) => {
+      if (productInfo) {
+        switch (action) {
+          case "add":
+            setCartBadge((prevState) => prevState + 1);
             handleProductCartActions(action, productInfo);
-          }
-          return;
-        default:
-          return;
+            return;
+          case "remove":
+            if (productInfo.sellCount > 0) {
+              setCartBadge((prevState) => prevState - 1);
+              handleProductCartActions(action, productInfo);
+            }
+            return;
+          default:
+            return;
+        }
       }
-    }
-  }, [handleProductCartActions]);
+    },
+    [handleProductCartActions]
+  );
 
   const getComponentToRender = (pageType) => {
     switch (pageType) {
@@ -116,7 +119,12 @@ function DashboardContent() {
       case "recentOrders":
         return <RecentOrders />;
       case "shoppingcart":
-        return <ShoppingCart setPageType={setPageType} />;
+        return (
+          <ShoppingCart
+            handleCartDetails={handleCartDetails}
+            setPageType={setPageType}
+          />
+        );
       case "checkout":
         return <Checkout />;
       default:
@@ -161,6 +169,7 @@ function DashboardContent() {
 
           <IconButton
             color="inherit"
+            disabled={pageType === "shoppingcart" || pageType === "checkout"}
             onClick={() => {
               setPageType("shoppingcart");
             }}
