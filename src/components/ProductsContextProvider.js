@@ -32,7 +32,7 @@ const ProductsContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
-    getMedicinesData();
+    currentUser !== null && getMedicinesData();
     return () => {};
   }, []);
 
@@ -85,9 +85,9 @@ const ProductsContextProvider = ({ children }) => {
     let totalAmount = 0;
     const itemsName = checkoutItems.map((item) => item.name).join(",");
     checkoutItems.map((item) => {
-      totalAmount =
+      return (totalAmount =
         Number(totalAmount) +
-        Number((Number(item.price.slice(1)) * item.cartCount).toFixed(2));
+        Number((Number(item.price.slice(1)) * item.cartCount).toFixed(2)));
     });
     const checkoutObject = new Parse.Object("Orders");
     checkoutObject.set("userId", currentUser.id);

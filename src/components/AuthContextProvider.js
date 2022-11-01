@@ -17,12 +17,12 @@ export function AuthContextProvider({ children }) {
     async function retriveUser() {
       const currentUser = await Parse.User.current();
       setCurrentUser(currentUser);
-      currentUser !== null && navigate("/dashboard");
       setLoading(false);
+      currentUser !== null && navigate("/dashboard");
     }
     retriveUser();
     return () => {};
-  }, [navigate]);
+  }, []);
 
   async function signup(userDetails) {
     try {
@@ -44,7 +44,9 @@ export function AuthContextProvider({ children }) {
 
   async function signin(userDetails) {
     try {
-      const loggedInUser = await Parse.User.logIn(userDetails.email, userDetails.password
+      const loggedInUser = await Parse.User.logIn(
+        userDetails.email,
+        userDetails.password
       );
       setCurrentUser(loggedInUser);
       return loggedInUser;
@@ -58,6 +60,9 @@ export function AuthContextProvider({ children }) {
     try {
       await Parse.User.logOut();
       setCurrentUser(null);
+      caches.keys().then(function (names) {
+        for (let name of names) caches.delete(name);
+      });
     } catch (error) {
       setError(error.message);
     } finally {

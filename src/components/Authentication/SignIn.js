@@ -12,79 +12,85 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "../AuthContextProvider";
 import { useNavigate } from "react-router";
-import { Formik, Form, Field} from "formik"
+import { Formik, Form, Field } from "formik";
 
 export default function SignIn() {
   const { signin } = useAuth();
   const navigate = useNavigate();
 
   return (
-    <Formik enableReinitialize={true}
+    <Formik
+      enableReinitialize={true}
       initialValues={{
         email: "",
-        password: ""
+        password: "",
       }}
-      validate= { values => {
+      validate={(values) => {
         const errors = {};
-        if(!values.email)
-        errors.email = "Required";
+        if (!values.email) errors.email = "Required";
 
-        if(!values.password)
-        errors.password = "Required";
+        if (!values.password) errors.password = "Required";
         return errors;
       }}
-      onSubmit={async (values, {setSubmitting, resetForm}) => {
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
         const userData = await signin(values);
         setSubmitting(false);
-        userData !== null && navigate("/dashboard");        
-      }
-    }
+        userData !== null && navigate("/dashboard");
+      }}
     >
-      {({ submitForm, isSubmitting, values, setFieldValues}) => (
-      <Form>
-        <Grid container component="main" sx={{ height: "100vh" }}>
-          <Grid
-            item
-            xs={false}
-            sm={4}
-            md={7}
-            sx={{
-              backgroundImage: "url(https://source.unsplash.com/random)",
-              backgroundRepeat: "no-repeat",
-              backgroundColor: (t) =>
-                t.palette.mode === "light"
-                  ? t.palette.grey[50]
-                  : t.palette.grey[900],
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-            <Box
+      {({ submitForm, isSubmitting, values, setFieldValues }) => (
+        <Form>
+          <Grid container component="main" sx={{ height: "100vh" }}>
+            <Grid
+              item
+              xs={false}
+              sm={4}
+              md={7}
               sx={{
-                my: 8,
-                mx: 4,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                backgroundImage: "url(https://source.unsplash.com/random)",
+                backgroundRepeat: "no-repeat",
+                backgroundColor: (t) =>
+                  t.palette.mode === "light"
+                    ? t.palette.grey[50]
+                    : t.palette.grey[900],
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
+            />
+            <Grid
+              item
+              xs={12}
+              sm={8}
+              md={5}
+              component={Paper}
+              elevation={6}
+              square
             >
-              <Avatar sx={{ m: 1, bgcolor: "slategray" }}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
+              <Box
+                sx={{
+                  my: 8,
+                  mx: 4,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar sx={{ m: 1, bgcolor: "slategray" }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                  Sign in
+                </Typography>
                 <Field
-                  component = {TextField}
-                  type = "text"
+                  component={TextField}
+                  type="text"
                   margin="normal"
                   fullWidth
                   label="Email Address"
                   name="email"
                 />
                 <Field
-                  component = {TextField}
+                  component={TextField}
                   margin="normal"
                   fullWidth
                   name="password"
@@ -93,7 +99,7 @@ export default function SignIn() {
                   id="password"
                   autoComplete="current-password"
                 />
-                <Grid container xs={12} alignItems = {"flex-start"}>
+                <Grid container xs={12} alignItems={"flex-start"}>
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
@@ -121,10 +127,10 @@ export default function SignIn() {
                   </Grid>
                 </Grid>
               </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Form>
-    )}
-    </Formik>    
+        </Form>
+      )}
+    </Formik>
   );
 }
