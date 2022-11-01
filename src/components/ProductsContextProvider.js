@@ -33,7 +33,6 @@ const ProductsContextProvider = ({ children }) => {
       }
     };
     currentUser !== null && getMedicinesData();
-    return () => {};
   }, []);
 
   const handleProductCartActions = (action, productInfo) => {

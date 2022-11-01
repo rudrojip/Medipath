@@ -60,9 +60,6 @@ export function AuthContextProvider({ children }) {
     try {
       await Parse.User.logOut();
       setCurrentUser(null);
-      caches.keys().then(function (names) {
-        for (let name of names) caches.delete(name);
-      });
     } catch (error) {
       setError(error.message);
     } finally {
