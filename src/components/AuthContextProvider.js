@@ -44,9 +44,7 @@ export function AuthContextProvider({ children }) {
 
   async function signin(userDetails) {
     try {
-      const loggedInUser = await Parse.User.logIn(
-        userDetails.get("email"),
-        userDetails.get("password")
+      const loggedInUser = await Parse.User.logIn(userDetails.email, userDetails.password
       );
       setCurrentUser(loggedInUser);
       return loggedInUser;
