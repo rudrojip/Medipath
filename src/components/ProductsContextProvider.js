@@ -27,7 +27,7 @@ const ProductsContextProvider = ({ children }) => {
 
         setProducts(products);
       } catch (error) {
-        alert(`Error! ${error.message}`);
+        console.log(error);
       } finally {
         setLoading(false);
       }
