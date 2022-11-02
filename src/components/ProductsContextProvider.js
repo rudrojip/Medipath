@@ -212,7 +212,8 @@ function destructureProductSchema(medicine) {
   const price = medicine.get("Price").replace("$", "₹");
   const sellCount = medicine.get("SellCount") || 0;
   const cartCount = medicine.get("CartCount") || 0;
-
+  const isPrescriptionRequired =
+    medicine.get("IsPrescriptionRequired") || false;
   return {
     id: medicine.id,
     name: name,
@@ -223,5 +224,6 @@ function destructureProductSchema(medicine) {
     price: price,
     sellCount: sellCount,
     cartCount: cartCount,
+    isPrescriptionRequired: isPrescriptionRequired
   };
 }

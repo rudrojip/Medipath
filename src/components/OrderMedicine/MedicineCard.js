@@ -15,16 +15,42 @@ export default function MedicineCard({
   handleCartDetails = () => {},
   isRecentProduct = false,
 }) {
-  const { name, description, rating, stock, image, price, cartCount } = product;
+  const {
+    name,
+    description,
+    rating,
+    stock,
+    image,
+    price,
+    cartCount,
+    sellCount,
+    isPrescriptionRequired,
+  } = product;
 
   return (
     <Card sx={{ maxWidth: 240, p: "10px 10px 0 10px" }}>
-      <Chip
-        color={stock > 0 ? "success" : "error"}
-        label={stock > 0 ? "In stock" : "out of stock"}
-        sx={{ p: 1 }}
-        size="small"
-      />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: 2,
+          flexWrap: "wrap",
+        }}
+      >
+        <Chip
+          color={stock > 0 ? "success" : "error"}
+          label={stock > 0 ? "In stock" : "out of stock"}
+          sx={{ p: 1 }}
+          size="small"
+        />
+        {sellCount > 10 && (
+          <Chip color={"warning"} label="popular" size="small" />
+        )}
+
+        {isPrescriptionRequired && (
+          <Chip color={"info"} label="prescription required" size="small" />
+        )}
+      </div>
       <Tooltip title={name} arrow>
         <CardHeader subheader={name} />
       </Tooltip>
