@@ -224,6 +224,6 @@ function destructureProductSchema(medicine) {
     price: price,
     sellCount: sellCount,
     cartCount: cartCount,
-    isPrescriptionRequired: isPrescriptionRequired
+    isPrescriptionRequired: isPrescriptionRequired,
   };
 }
