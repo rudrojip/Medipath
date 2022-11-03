@@ -169,7 +169,6 @@ const ProductsContextProvider = ({ children }) => {
 
   const getRecentlyOrderedProducts = async () => {
     const parseQuery = new Parse.Query("Medicines");
-    parseQuery.descending("createdAt");
     parseQuery.limit(12);
     parseQuery.greaterThan("SellCount", 0);
     try {
