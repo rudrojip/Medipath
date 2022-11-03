@@ -14,7 +14,7 @@ export const useProductsContext = () => useContext(ProductContext);
 const ProductsContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useAuth();
+  const { currentUser, signout } = useAuth();
 
   useEffect(() => {
     const getMedicinesData = async function () {
@@ -28,6 +28,7 @@ const ProductsContextProvider = ({ children }) => {
         setProducts(products);
       } catch (error) {
         console.log(error);
+        signout();
       } finally {
         setLoading(false);
       }
