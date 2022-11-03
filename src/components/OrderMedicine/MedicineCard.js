@@ -14,6 +14,7 @@ export default function MedicineCard({
   product,
   handleCartDetails = () => {},
   isRecentProduct = false,
+  displayPrescription = false,
 }) {
   const {
     name,
@@ -28,7 +29,7 @@ export default function MedicineCard({
   } = product;
 
   return (
-    <Card sx={{ maxWidth: 240, p: "10px 10px 0 10px" }}>
+    <Card sx={{ width: 240, p: "10px 10px 0 10px" }}>
       <div
         style={{
           display: "flex",
@@ -43,12 +44,13 @@ export default function MedicineCard({
           sx={{ p: 1 }}
           size="small"
         />
-        {sellCount > 10 && (
-          <Chip color={"warning"} label="popular" size="small" />
-        )}
 
-        {isPrescriptionRequired && (
+        {isPrescriptionRequired && displayPrescription ? (
           <Chip color={"info"} label="prescription required" size="small" />
+        ) : (
+          sellCount > 10 && (
+            <Chip color={"warning"} label="popular" size="small" />
+          )
         )}
       </div>
       <Tooltip title={name} arrow>

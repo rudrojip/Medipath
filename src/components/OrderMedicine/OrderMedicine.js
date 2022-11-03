@@ -43,6 +43,7 @@ const OrderMedicine = ({ handleCartDetails }) => {
                   handleCartDetails={handleCartDetails}
                   key={index}
                   product={medicine}
+                  displayPrescription={true}
                 />
               );
             })}

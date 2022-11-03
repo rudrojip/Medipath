@@ -80,6 +80,7 @@ const EmptyCart = ({ handleCartDetails }) => {
                       product={product}
                       handleCartDetails={handleCartDetails}
                       isRecentProduct={isRecentProduct}
+                      displayPrescription={true}
                     />
                   </Paper>
                 );

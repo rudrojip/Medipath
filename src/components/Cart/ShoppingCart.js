@@ -180,7 +180,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
               <Button
                 variant="contained"
                 component="label"
-                onClick={(e) => e.target.value && setUploadedImage(true)}
+                onChange={(e) => e.target.value && setUploadedImage(true)}
               >
                 Upload Prescription
                 <input hidden accept="image/*" type="file" />
