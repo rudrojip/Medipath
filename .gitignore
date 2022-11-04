@@ -11,6 +11,9 @@
 # production
 /build
 
+#backup data
+/__mock__
+
 # misc
 .DS_Store
 .env.local

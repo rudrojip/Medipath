@@ -9,6 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 import { Button, Paper } from "@mui/material";
+import Stack from "@mui/material/Stack";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { useEffect, useRef, useState } from "react";
@@ -18,6 +19,7 @@ import { useProductsContext } from "../ProductsContextProvider";
 export default function ShoppingCart({ setPageType, handleCartDetails }) {
   const { products, getCartData } = useProductsContext();
   const [cartData, setCartData] = useState([]);
+  const [uploadedImage, setUploadedImage] = useState(false);
   const totalAmount = useRef(0);
 
   useEffect(() => {
@@ -162,13 +164,29 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
             justifyContent: "center",
           }}
         >
-          <Button
-            sx={{ maxWidth: "25rem" }}
-            variant="contained"
-            onClick={() => setPageType("checkout")}
-          >
-            Proceed to checkout
-          </Button>
+          <Stack direction="row" alignItems="right" spacing={2}>
+            <Button
+              sx={{ maxWidth: "25rem" }}
+              variant="contained"
+              disabled={
+                cartData.find((item) => item.isPrescriptionRequired) === -1 ||
+                !uploadedImage
+              }
+              onClick={() => setPageType("checkout")}
+            >
+              Proceed to checkout
+            </Button>
+            {cartData.find((item) => item.isPrescriptionRequired) && (
+              <Button
+                variant="contained"
+                component="label"
+                onChange={(e) => e.target.value && setUploadedImage(true)}
+              >
+                Upload Prescription
+                <input hidden accept="image/*" type="file" />
+              </Button>
+            )}
+          </Stack>
         </Paper>
       )}
     </div>

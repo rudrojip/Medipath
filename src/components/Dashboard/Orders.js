@@ -63,7 +63,7 @@ export default function Orders({ setPageType }) {
           </Link>
         </>
       ) : (
-        <Typography variant="h3">No Recent Orders</Typography>
+        <Typography variant="h3">No Transactions</Typography>
       )}
     </React.Fragment>
   );

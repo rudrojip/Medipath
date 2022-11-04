@@ -14,7 +14,7 @@ export const useProductsContext = () => useContext(ProductContext);
 const ProductsContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useAuth();
+  const { currentUser, signout } = useAuth();
 
   useEffect(() => {
     const getMedicinesData = async function () {
@@ -27,7 +27,8 @@ const ProductsContextProvider = ({ children }) => {
 
         setProducts(products);
       } catch (error) {
-        alert(`Error! ${error.message}`);
+        console.log(error);
+        signout();
       } finally {
         setLoading(false);
       }
@@ -168,7 +169,6 @@ const ProductsContextProvider = ({ children }) => {
 
   const getRecentlyOrderedProducts = async () => {
     const parseQuery = new Parse.Query("Medicines");
-    parseQuery.descending("createdAt");
     parseQuery.limit(12);
     parseQuery.greaterThan("SellCount", 0);
     try {
@@ -212,7 +212,8 @@ function destructureProductSchema(medicine) {
   const price = medicine.get("Price").replace("$", "₹");
   const sellCount = medicine.get("SellCount") || 0;
   const cartCount = medicine.get("CartCount") || 0;
-
+  const isPrescriptionRequired =
+    medicine.get("IsPrescriptionRequired") || false;
   return {
     id: medicine.id,
     name: name,
@@ -223,5 +224,6 @@ function destructureProductSchema(medicine) {
     price: price,
     sellCount: sellCount,
     cartCount: cartCount,
+    isPrescriptionRequired: isPrescriptionRequired,
   };
 }
