@@ -50,10 +50,8 @@ export default function Checkout({ setCartBadge }) {
             country: "",
             cardName: "",
             cardNumber: "",
+            expDate:"",
             cvv: "",
-
-
-
           }}
           validate={values => {
             const errors ={}
@@ -115,6 +113,7 @@ export default function Checkout({ setCartBadge }) {
             if (activeStep === steps.length - 1) {
               await proceedToCheckout(values);
               setCartBadge(0);
+              setActiveStep(activeStep + 1);
             }
 
           }}

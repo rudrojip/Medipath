@@ -10,12 +10,17 @@ const  Review = ({values}) => {
   const { products, getCartData } = useProductsContext();
   const [productsList, setProductsList] = useState([]);
   const totalAmount = useRef(0);
-  const addresses = [values?.address1 ?? "1 MUI Drive", values?.city ?? "Reactville", values?.state ?? "Anytown", values?.zip ?? "99999", values?.country ?? "USA"];
+  console.log("valuessss", values)
+  const addresses = [(values?.address1 != "") ? values?.address :  "1 MUI Drive",
+                     (values?.city != "") ? values?.city :  "Reactville",
+                     (values?.state != "") ? values?.state :  "Anytown",
+                     (values?.zip != "") ? values?.zip : "99999",
+                     (values?.country != "") ? values?.country :  "USA"];
   const payments = [
     { name: "Card type", detail: "Visa" },
-    { name: "Card holder", detail: values?.cardName ?? "Mr John Smith" },
-    { name: "Card number", detail: values?.cardNumber ?? "xxxx-xxxx-xxxx-1234" },
-    { name: "Expiry date", detail: values?.expDate ?? "04/2024" },
+    { name: "Card holder", detail: (values?.cardName != "") ? values?.cardName : "Mr John Smith" },
+    { name: "Card number", detail: (values?.cardNumber != "") ? values?.cardNumber : "xxxx-xxxx-xxxx-1234" },
+    { name: "Expiry date", detail: (values?.expDate != "") ? values?.expDate : "04/2024" },
   ];
   useEffect(() => {
     totalAmount.current = 0;
