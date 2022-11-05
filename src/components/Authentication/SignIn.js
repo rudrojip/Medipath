@@ -23,7 +23,7 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const errorCheck = await validateFunction(data);
-    if(!errorCheck) {
+    if(!!errorCheck) {
       const userData = await signin(data);
       userData !== null && navigate("/dashboard");
     }

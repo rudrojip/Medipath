@@ -6,19 +6,17 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useRef, useState } from "react";
 import { useProductsContext } from "../ProductsContextProvider";
 
-const addresses = ["1 MUI Drive", "Reactville", "Anytown", "99999", "USA"];
-const payments = [
-  { name: "Card type", detail: "Visa" },
-  { name: "Card holder", detail: "Mr John Smith" },
-  { name: "Card number", detail: "xxxx-xxxx-xxxx-1234" },
-  { name: "Expiry date", detail: "04/2024" },
-];
-
-export default function Review() {
+const  Review = ({values}) => {
   const { products, getCartData } = useProductsContext();
   const [productsList, setProductsList] = useState([]);
   const totalAmount = useRef(0);
-
+  const addresses = [values?.address1 ?? "1 MUI Drive", values?.city ?? "Reactville", values?.state ?? "Anytown", values?.zip ?? "99999", values?.country ?? "USA"];
+  const payments = [
+    { name: "Card type", detail: "Visa" },
+    { name: "Card holder", detail: values?.cardName ?? "Mr John Smith" },
+    { name: "Card number", detail: values?.cardNumber ?? "xxxx-xxxx-xxxx-1234" },
+    { name: "Expiry date", detail: values?.expDate ?? "04/2024" },
+  ];
   useEffect(() => {
     totalAmount.current = 0;
     const cartItems = getCartData();
@@ -70,7 +68,7 @@ export default function Review() {
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
+          <Typography gutterBottom>{values.cardName}</Typography>
           <Typography gutterBottom>{addresses.join(", ")}</Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
@@ -94,3 +92,5 @@ export default function Review() {
     </React.Fragment>
   );
 }
+
+export default Review
