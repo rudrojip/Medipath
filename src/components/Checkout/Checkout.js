@@ -22,21 +22,24 @@ export default function Checkout({ setCartBadge }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const { proceedToCheckout } = useProductsContext();
   const navigate = useNavigate();
-  const [errors, setErrors] = React.useState({}) 
+  const [errors, setErrors] = React.useState(true)
  
   const handleNext = async () => {
     
-    if (activeStep === steps.length) {
+    if (activeStep != steps.length) {
+      setErrors(true);
+      setActiveStep(activeStep + 1);
       // console.log("hiiiiiiiiiiiii")
       // navigate("/dashboard");
     }
-    setActiveStep(activeStep + 1);
+    
   };
 
   const handleBack = () => {
+    setErrors(false)
     setActiveStep(activeStep - 1);
   };
-
+  
   return (
     
         <Formik enableReinitialize={true} 
@@ -127,8 +130,12 @@ export default function Checkout({ setCartBadge }) {
                 errors.cvv = "Invalid CVV"
               }
             }
-            
-            setErrors(errors)
+            if((Object.keys(errors).length === 0)) {
+             setErrors(false)
+            }
+            else {
+              setErrors(true)
+            }
             return errors;
           }}
           onSubmit= {async ( values, { setSubmitting, resetForm }) => {
@@ -191,7 +198,7 @@ export default function Checkout({ setCartBadge }) {
                       </Button>
                     }
                     {
-                      (activeStep === steps.length - 1) ?
+                      (activeStep === steps.length - 1) &&
                       <Button
                         variant="contained"
                         onClick={submitForm}
@@ -200,16 +207,32 @@ export default function Checkout({ setCartBadge }) {
                       >
                         Place Order
                       </Button>
-                     : 
+                    }
+                    {
+                      (activeStep === steps.length) &&
+
                       <Button
                         variant="contained"
                         onClick={handleNext}
-                        disabled={!(Object.keys(errors).length === 0)}
                         sx={{ mt: 3, ml: 1 }}
                       >
-                        {(activeStep === steps.length) ? "close" : "Next"}
+                        close
                       </Button>
                     }
+                    {
+                      !( (activeStep === steps.length - 1) || (activeStep === steps.length)) && 
+                    
+                      <Button
+                        variant="contained"
+                        onClick={handleNext}
+                        disabled={errors}
+                        sx={{ mt: 3, ml: 1 }}
+                      >
+                        Next
+                      </Button>
+
+                    }
+
                   </Box>
                 </Paper>
               </Container>
