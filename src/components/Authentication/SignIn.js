@@ -35,10 +35,7 @@ export default function SignIn() {
 
     if (!values.get("email")) {
       errors.email = "Required";
-    } else if (!regex.Mail.test(values.get("email"))) {
-      errors.email = "Invalid email";
-    }
-
+    } 
     if (!values.get("password")) {
       errors.password = "Required";
     }

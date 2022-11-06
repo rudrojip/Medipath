@@ -12,7 +12,7 @@
 /build
 
 #backup data
-/__mock__
+__mock__
 
 # misc
 .DS_Store
