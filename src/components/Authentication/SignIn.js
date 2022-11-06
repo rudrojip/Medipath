@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import { useAuth } from "../AuthContextProvider";
 import { useNavigate } from "react-router";
 import { regex, global } from "../../config";
-import logo from "./medipath-logo.png";
+import logowhite from "./logo-white.png";
 
 export default function SignIn() {
   const { signin } = useAuth();
@@ -54,7 +54,7 @@ export default function SignIn() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${logo})`,
+          backgroundImage: `url(${logowhite})`,
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
