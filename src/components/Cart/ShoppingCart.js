@@ -25,6 +25,7 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
   useEffect(() => {
     totalAmount.current = 0;
     const cartDetails = getCartData();
+    console.log(cartDetails);
     setCartData(cartDetails);
     return () => {
       totalAmount.current = 0;
@@ -169,17 +170,19 @@ export default function ShoppingCart({ setPageType, handleCartDetails }) {
               sx={{ maxWidth: "25rem" }}
               variant="contained"
               disabled={
-                cartData.find((item) => item.isPrescriptionRequired) === -1 ||
+                cartData.filter((item) => item.isPrescriptionRequired).length !== 0 &&
                 !uploadedImage
               }
               onClick={() => setPageType("checkout")}
             >
               Proceed to checkout
             </Button>
-            {cartData.find((item) => item.isPrescriptionRequired) && (
+            {cartData.filter((item) => item.isPrescriptionRequired).length >
+              0 && (
               <Button
                 variant="contained"
                 component="label"
+                disabled={uploadedImage}
                 onChange={(e) => e.target.value && setUploadedImage(true)}
               >
                 Upload Prescription
