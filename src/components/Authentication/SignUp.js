@@ -12,15 +12,59 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router";
 import { useAuth } from "../AuthContextProvider";
+import {regex, global} from "../../config"
 
 export default function SignUp() {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [errors, setErrors] = React.useState(null); 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const userData = await signup(data);
-    userData !== null && navigate("/dashboard");
+    const errorCheck = await validateFunction(data);
+    if(!errorCheck) {
+      const userData = await signup(data);
+      userData !== null && navigate("/dashboard");
+    }
+  };
+
+  const validateFunction = async (values) => {
+    const errors = {}
+
+    if(!values.get("firstName")) {
+      errors.firstName = "Required"
+    }
+    else if(!regex.Alphabets.test(values.get("firstName"))) {
+      errors.firstName = "Invalid Name"
+    }
+
+    if(!values.get("lastName")) {
+      errors.lastName = "Required"
+    }
+    else if(!regex.Alphabets.test(values.get("lastName"))) {
+      errors.lastName = "Invalid Name"
+    }
+
+    if(!values.get("email")) {
+      errors.email = "Required"
+    }
+    else if(!regex.Mail.test(values.get("email"))) {
+      errors.email = "Invalid email"
+    }
+
+    if(!values.get("userName")) {
+      errors.userName = "Required"
+    }
+    else if(!regex.userName.test(values.get("userName"))) {
+      errors.userName = "Invalid user name"
+    }
+
+    if(!values.get("password")) {
+      errors.password = "Required"
+    }
+    setErrors(errors);
+    return errors
   };
 
   return (
@@ -50,6 +94,8 @@ export default function SignUp() {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                error = {!!errors?.firstName}
+                helperText={errors?.firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -60,6 +106,8 @@ export default function SignUp() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="family-name"
+                error = {!!errors?.lastName}
+                helperText={errors?.lastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -70,6 +118,8 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                error = {!!errors?.email}
+                helperText={errors?.email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -80,6 +130,8 @@ export default function SignUp() {
                 label="UserName"
                 name="userName"
                 autoComplete="userName"
+                error = {!!errors?.userName}
+                helperText={errors?.userName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -91,11 +143,13 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                error = {!!errors?.password}
+                helperText={errors?.password}
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={<Checkbox name="termscheck" value="allowExtraEmails" color="primary" />}
                 label="Accept our terms & conditions"
               />
             </Grid>

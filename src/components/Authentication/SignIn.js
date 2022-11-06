@@ -12,16 +12,38 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "../AuthContextProvider";
 import { useNavigate } from "react-router";
+import {regex, global} from "../../config"
 
 export default function SignIn() {
   const { signin } = useAuth();
   const navigate = useNavigate();
+  const [errors, setErrors] = React.useState(null); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const userData = await signin(data);
-    userData !== null && navigate("/dashboard");
+    const errorCheck = await validateFunction(data);
+    if(!!errorCheck) {
+      const userData = await signin(data);
+      userData !== null && navigate("/dashboard");
+    }
+  };
+
+  const validateFunction = async (values) => {
+    const errors = {}
+
+    if(!values.get("email")) {
+      errors.email = "Required"
+    }
+    else if(!regex.Mail.test(values.get("email"))) {
+      errors.email = "Invalid email"
+    }
+
+    if(!values.get("password")) {
+      errors.password = "Required"
+    }
+    setErrors(errors);
+    return errors
   };
 
   return (
@@ -73,6 +95,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              error = {!!errors?.email}
+              helperText={errors?.email}
             />
             <TextField
               margin="normal"
@@ -83,6 +107,8 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error = {!!errors?.password}
+              helperText={errors?.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
