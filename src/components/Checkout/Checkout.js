@@ -77,24 +77,40 @@ export default function Checkout({ setCartBadge }) {
               if(!values.city) {
                 errors.city = "Required"
               }
+              else if(!regex.Alphabets.test(values.city)) {
+                errors.city = "Invalid city name"
+              }
               
               if(!values.state) {
                 errors.state = "Required"
               }
+              else if(!regex.Alphabets.test(values.state)) {
+                errors.state = "Invalid state name"
+              }
+
               if(!values.zip) {
                 errors.zip = "Required"
               }
               if(!values.country) {
                 errors.country = "Required"
               }
+              else if(!regex.Alphabets.test(values.country)) {
+                errors.country = "Invalid country name"
+              }
             }
             if(activeStep == 1) {
               if(!values.cardName) {
                 errors.cardName = "Required"
               }
+              else if(!regex.Alphabets.test(values.cardName)) {
+                errors.cardName = "Invalid cardName name"
+              }
 
               if(!values.cardNumber) {
                 errors.cardNumber = "Required"
+              }
+              else if(isNaN(values.cardNumber)) {
+                errors.cardNumber = "Only Numbers are allowed"
               }
 
               if(!values.expDate) {
@@ -103,6 +119,12 @@ export default function Checkout({ setCartBadge }) {
 
               if(!values.cvv) {
                 errors.cvv = "Required"
+              }
+              else if(isNaN(values.cvv)) {
+                errors.cvv = "Only Numbers are allowed"
+              }
+              else if(values.cvv > 999) {
+                errors.cvv = "Invalid CVV"
               }
             }
             
