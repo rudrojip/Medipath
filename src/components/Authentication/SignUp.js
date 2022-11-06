@@ -23,7 +23,7 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const errorCheck = await validateFunction(data);
-    if(!errorCheck) {
+    if(Object.keys(errorCheck).length === 0) {
       const userData = await signup(data);
       userData !== null && navigate("/dashboard");
     }
