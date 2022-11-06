@@ -12,38 +12,38 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useAuth } from "../AuthContextProvider";
 import { useNavigate } from "react-router";
-import {regex, global} from "../../config"
+import { regex, global } from "../../config";
+import logo from "./medipath-logo.png";
 
 export default function SignIn() {
   const { signin } = useAuth();
   const navigate = useNavigate();
-  const [errors, setErrors] = React.useState(null); 
+  const [errors, setErrors] = React.useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const errorCheck = await validateFunction(data);
-    if(!!errorCheck) {
+    if (!!errorCheck) {
       const userData = await signin(data);
       userData !== null && navigate("/dashboard");
     }
   };
 
   const validateFunction = async (values) => {
-    const errors = {}
+    const errors = {};
 
-    if(!values.get("email")) {
-      errors.email = "Required"
-    }
-    else if(!regex.Mail.test(values.get("email"))) {
-      errors.email = "Invalid email"
+    if (!values.get("email")) {
+      errors.email = "Required";
+    } else if (!regex.Mail.test(values.get("email"))) {
+      errors.email = "Invalid email";
     }
 
-    if(!values.get("password")) {
-      errors.password = "Required"
+    if (!values.get("password")) {
+      errors.password = "Required";
     }
     setErrors(errors);
-    return errors
+    return errors;
   };
 
   return (
@@ -54,7 +54,7 @@ export default function SignIn() {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage: `url(${logo})`,
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
@@ -95,7 +95,7 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              error = {!!errors?.email}
+              error={!!errors?.email}
               helperText={errors?.email}
             />
             <TextField
@@ -107,7 +107,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-              error = {!!errors?.password}
+              error={!!errors?.password}
               helperText={errors?.password}
             />
             <FormControlLabel
